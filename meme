@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,6 +15,8 @@ namespace higherlower
     {
         public static int rows = 4;
         public static int cols = 4;
+        public int firstCardX, firstCardY;
+        bool firstCardOpened = false;
         Random rand = new Random();
         string[] symbolsArray = { "🕾", "🖑", "🖍", "☺", "☯", "🖳", "🏶", "★" };
         List<string> availableSymbols = new List<string>();
@@ -28,10 +31,12 @@ namespace higherlower
         public void OpenCard(int x, int y)
         {
             cardControls[x, y].Text = whatSymbol[x, y];
+            cardControls[x, y].BackColor = Color.White;
         }
         public void CloseCard(int x, int y)
         {
-
+            cardControls[x, y].Text = "";
+            cardControls[x, y].BackColor = Color.Red;
         }
 
         public Memory()
@@ -57,9 +62,32 @@ namespace higherlower
                     cardControls[i, j] = card;
                     this.Controls.Add(cardControls[i, j]);
                     AddIcons(i, j);
+                    int ii = i;
+                    int jj = j;
                     card.Click += (sender, args) =>
                     {
-                        cardControls[i, j].Text = whatSymbol[i, j];
+                        OpenCard(ii, jj);
+
+                        if (firstCardOpened == false)
+                        {
+                            firstCardX = ii;
+                            firstCardY = jj;
+                            firstCardOpened = true;
+                        }
+                        else
+                        {
+                            if (whatSymbol[ii, jj] == whatSymbol[firstCardX,firstCardY])
+                            {
+                                MessageBox.Show("!");
+                            }
+                            else
+                            {
+                                Task.Delay(1000).Wait();
+                                CloseCard(ii, jj);
+                                CloseCard(firstCardX, firstCardY);
+                                firstCardOpened = false;
+                            }
+                        }
                     };
 
                 }
