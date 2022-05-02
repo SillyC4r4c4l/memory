@@ -15,35 +15,52 @@ namespace higherlower
         public static int rows = 4;
         public static int cols = 4;
         Random rand = new Random();
-        //string[] iconsArray = { "" };
-        List<string> iconsList = new List<string> { "🕾", "🖑", "🖍", "☺", "☯", "🖳", "🏶", "★" };
-        string[,] whatIcon = new string[rows, cols];
+        string[] symbolsArray = { "🕾", "🖑", "🖍", "☺", "☯", "🖳", "🏶", "★" };
+        List<string> availableSymbols = new List<string>();
+        string[,] whatSymbol = new string[rows, cols];
         Button[,] cardControls = new Button[rows,cols];
         public void AddIcons(int x, int y)
         {
-            int addIconDup = rand.Next(0, iconsList.Count * 2);
-            int addIcon = addIconDup > iconsList.Count ? addIconDup - iconsList.Count : addIconDup;
-            whatIcon[x, y] = iconsList[addIcon];
-            iconsList.Remove(iconsList[addIcon]);
+            int randSymbol = rand.Next(0, availableSymbols.Count);
+            whatSymbol[x, y] = availableSymbols[randSymbol];
+            availableSymbols.RemoveAt(randSymbol);
         }
+        public void OpenCard(int x, int y)
+        {
+            cardControls[x, y].Text = whatSymbol[x, y];
+        }
+        public void CloseCard(int x, int y)
+        {
+
+        }
+
         public Memory()
         {
             InitializeComponent();
+            for (int i = 0; i < symbolsArray.Length * 2; i++)
+            {
+                int num = i < symbolsArray.Length ? i : i - symbolsArray.Length;
+                availableSymbols.Insert(i, symbolsArray[num]);
+            }
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
                     Button card = new Button()
                     {
-                        Size = new Size(50, 50),
-                        Location = new Point(i * 55, j * 55),
+                        Size = new Size(75, 75),
+                        Location = new Point(i * 80, j * 80),
                         Visible = true,
-                        BackColor = Color.Black,
+                        BackColor = Color.Red,
+                        Font = new Font("Arial", 20),
                     };
                     cardControls[i, j] = card;
-
-
                     this.Controls.Add(cardControls[i, j]);
+                    AddIcons(i, j);
+                    card.Click += (sender, args) =>
+                    {
+                        cardControls[i, j].Text = whatSymbol[i, j];
+                    };
 
                 }
             }
