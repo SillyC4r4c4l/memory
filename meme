@@ -19,6 +19,13 @@ namespace higherlower
         List<string> iconsList = new List<string> { "🕾", "🖑", "🖍", "☺", "☯", "🖳", "🏶", "★" };
         string[,] whatIcon = new string[rows, cols];
         Button[,] cardControls = new Button[rows,cols];
+        public void AddIcons(int x, int y)
+        {
+            int addIconDup = rand.Next(0, iconsList.Count * 2);
+            int addIcon = addIconDup > iconsList.Count ? addIconDup - iconsList.Count : addIconDup;
+            whatIcon[x, y] = iconsList[addIcon];
+            iconsList.Remove(iconsList[addIcon]);
+        }
         public Memory()
         {
             InitializeComponent();
@@ -37,12 +44,7 @@ namespace higherlower
 
 
                     this.Controls.Add(cardControls[i, j]);
-                    int addIcon = rand.Next(0, iconsList.Count);
-                    for (int n = 0; n< 2; n++)
-                    {
-                        whatIcon[i, j] = iconsList[addIcon];
-                    }
-                    iconsList.Remove(iconsList[addIcon]);
+
                 }
             }
         }
