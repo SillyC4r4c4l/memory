@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace higherlower
+{
+    public partial class Memory : Form
+    {
+        public static int rows = 4;
+        public static int cols = 4;
+        Random rand = new Random();
+        //string[] iconsArray = { "" };
+        List<string> iconsList = new List<string> { "🕾", "🖑", "🖍", "☺", "☯", "🖳", "🏶", "★" };
+        string[,] whatIcon = new string[rows, cols];
+        Button[,] cardControls = new Button[rows,cols];
+        public Memory()
+        {
+            InitializeComponent();
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    Button card = new Button()
+                    {
+                        Size = new Size(50, 50),
+                        Location = new Point(i * 55, j * 55),
+                        Visible = true,
+                        BackColor = Color.Black,
+                    };
+                    cardControls[i, j] = card;
+
+
+                    this.Controls.Add(cardControls[i, j]);
+                    int addIcon = rand.Next(0, iconsList.Count);
+                    for (int n = 0; n< 2; n++)
+                    {
+                        whatIcon[i, j] = iconsList[addIcon];
+                    }
+                    iconsList.Remove(iconsList[addIcon]);
+                }
+            }
+        }
+    }
+}
